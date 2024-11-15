@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galerie Photos - Association des Anciens Élèves de Rochambeau</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>Association des Anciens Élèves</h1>
+                <h2>Lycée Français de Washington - Rochambeau</h2>
+            </div>
+            <div class="nav-content">
+                <div class="nav-links">
+                    <div class="social-nav">
+                        <!-- Social media links will be dynamically updated by JavaScript -->
+                    </div>
+                    <a href="index.html">Accueil</a>
+                    <a href="evenements.html">Événements</a>
+                    <a href="photos.html">Photos</a>
+                    <a href="index.html#annuaire">Annuaire</a>
+                    <a href="#" class="boutique-btn">Boutique</a>
+                </div>
+                <div class="auth-buttons">
+                    <button type="button" class="auth-btn login-btn" onclick="openLoginForm()">Se connecter</button>
+                    <button type="button" class="auth-btn signup-btn" onclick="openJoinForm()">S'inscrire</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="gallery">
+            <h2>Galerie Photos</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80" alt="Gala 2023">
+                    <h3>Gala 2023</h3>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80" alt="Retrouvailles 2023">
+                    <h3>Retrouvailles 2023</h3>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&q=80" alt="Remise des diplômes 2023">
+                    <h3>Remise des diplômes 2023</h3>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800&q=80" alt="Soirée de Noël 2023">
+                    <h3>Soirée de Noël 2023</h3>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&q=80" alt="Journée Portes Ouvertes 2023">
+                    <h3>Journée Portes Ouvertes 2023</h3>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?w=800&q=80" alt="Fête de la Musique 2023">
+                    <h3>Fête de la Musique 2023</h3>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="social-links">
+            <a href="https://www.instagram.com" target="_blank" class="social-icon instagram">
+                <i class="fab fa-instagram"></i>
+                <span>Suivez-nous sur Instagram</span>
+            </a>
+            <a href="https://www.facebook.com/groups" target="_blank" class="social-icon facebook">
+                <i class="fab fa-facebook"></i>
+                <span>Rejoignez notre groupe Facebook</span>
+            </a>
+        </div>
+        <div class="footer-info">
+            <p>&copy; 2024 Association des Anciens Élèves - Lycée Rochambeau</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
