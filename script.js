@@ -46,6 +46,7 @@ function handleNavigation() {
 // Modifiez la fonction loadHomePage comme suit :
 function loadHomePage() {
     loadPhotoAlbums();
+    // Ajoutez ici d'autres fonctions spécifiques à la page d'accueil si nécessaire
 }
 
 // Assurez-vous que ces fonctions sont exposées globalement
@@ -60,10 +61,20 @@ window.handleLogout = handleLogout;
 window.handleJoinSubmit = handleJoinSubmit;
 window.handleEditProfileSubmit = handleEditProfileSubmit;
 
-// Ajoutez cet appel de fonction à l'événement DOMContentLoaded
+// Modifiez l'événement DOMContentLoaded comme suit :
 document.addEventListener('DOMContentLoaded', () => {
     // ... (gardez le code existant ici)
 
-    // Ajoutez cet appel à la fin
+    // Ajoutez ces appels à la fin
     handleNavigation();
+    
+    // Chargez les albums photos directement si nous sommes sur la page d'accueil
+    if (window.location.pathname === "/" || window.location.pathname.endsWith("index.html")) {
+        loadPhotoAlbums();
+    }
 });
+
+// Fonction pour ouvrir un album photo (à implémenter)
+function openPhotoAlbum(albumId) {
+    alert(`Ouverture de l'album ${albumId}. Fonctionnalité à implémenter.`);
+}
