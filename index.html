@@ -10,27 +10,29 @@
 <body>
     <header>
         <nav>
-            <div class="logo">
-                <h1>Association des Anciens Élèves</h1>
-                <h2>Lycée Français de Washington - Rochambeau</h2>
+            <div class="logo-center">
+                <div class="logo">
+                    <h1>Association des Anciens Élèves</h1>
+                    <h2>Lycée Français de Washington - Rochambeau</h2>
+                </div>
             </div>
             <div class="nav-content">
                 <div class="nav-links">
                     <div class="social-nav">
-                        <a href="https://www.instagram.com" target="_blank" class="instagram">
+                        <a href="https://www.instagram.com/aaelwashington/" target="_blank" class="instagram">
                             <i class="fab fa-instagram"></i>
                             Instagram
                         </a>
-                        <a href="https://www.facebook.com/groups" target="_blank" class="facebook">
+                        <a href="https://www.facebook.com/groups/aaelwashington" target="_blank" class="facebook">
                             <i class="fab fa-facebook"></i>
                             Facebook
                         </a>
                     </div>
                     <a href="#accueil">Accueil</a>
-                    <a href="evenements.html">Événements</a>
-                    <a href="photos.html">Photos</a>
+                    <a href="#evenements">Événements</a>
+                    <a href="#photos">Photos</a>
                     <a href="#annuaire">Annuaire</a>
-                    <a href="#" class="boutique-btn">Boutique</a>
+                    <a href="https://aael-washington.myspreadshop.com/" target="_blank" class="boutique-btn">Boutique</a>
                 </div>
                 <div class="auth-buttons">
                     <button type="button" class="auth-btn login-btn" onclick="openLoginForm()">Se connecter</button>
@@ -49,19 +51,7 @@
         <section id="evenements" class="events">
             <h2>Nos Événements</h2>
             <div class="events-grid">
-                <div class="event-card">
-                    <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800&q=80" alt="Gala Annuel">
-                    <h3>Gala Annuel 2024</h3>
-                    <p>Rejoignez-nous pour une soirée exceptionnelle de retrouvailles</p>
-                </div>
-                <div class="event-card">
-                    <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&q=80" alt="Rencontre des Anciens">
-                    <h3>Rencontre des Anciens</h3>
-                    <p>Networking et partage d'expériences entre générations</p>
-                </div>
-            </div>
-            <div class="center-button">
-                <a href="evenements.html" class="btn">Voir tous les événements</a>
+                <!-- Events will be dynamically loaded by JavaScript -->
             </div>
         </section>
 
@@ -70,21 +60,16 @@
             <div class="gallery-grid">
                 <!-- Photo albums will be dynamically loaded by JavaScript -->
             </div>
-            <div class="center-button">
-                <a href="photos.html" class="btn">Voir toutes les photos</a>
-            </div>
         </section>
 
         <section id="annuaire" class="directory">
             <h2>Annuaire des Anciens Élèves</h2>
             
-            <!-- Section de connexion -->
             <div id="loginSection" class="login-section">
                 <h3>Accès réservé aux anciens élèves</h3>
                 <p>Connectez-vous pour accéder à l'annuaire des anciens élèves</p>
             </div>
 
-            <!-- Contenu de l'annuaire (visible uniquement après connexion) -->
             <div id="directoryContent" style="display: none;">
                 <div class="user-welcome">
                     <span id="userWelcome"></span>
@@ -113,17 +98,21 @@
 
     <footer>
         <div class="social-links">
-            <a href="https://www.instagram.com" target="_blank" class="social-icon instagram">
+            <a href="https://www.instagram.com/aaelwashington/" target="_blank" class="social-icon instagram">
                 <i class="fab fa-instagram"></i>
                 <span>Suivez-nous sur Instagram</span>
             </a>
-            <a href="https://www.facebook.com/groups" target="_blank" class="social-icon facebook">
+            <a href="https://www.facebook.com/groups/aaelwashington" target="_blank" class="social-icon facebook">
                 <i class="fab fa-facebook"></i>
                 <span>Rejoignez notre groupe Facebook</span>
             </a>
+            <a href="https://aael-washington.myspreadshop.com/" target="_blank" class="social-icon shop">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Visitez notre boutique</span>
+            </a>
         </div>
         <div class="footer-info">
-            <p>&copy; 2024 Association des Anciens Élèves - Lycée Rochambeau</p>
+            <p>&copy; 2023 Association des Anciens Élèves - Lycée Rochambeau</p>
         </div>
     </footer>
 
@@ -144,6 +133,9 @@
                 <button type="submit" class="submit-btn">Se connecter</button>
             </form>
             <p class="modal-footer">
+                <a href="#" onclick="openForgotPasswordForm()">Mot de passe oublié ?</a>
+            </p>
+            <p class="modal-footer">
                 Pas encore inscrit ? <a href="#" onclick="closeLoginForm(); openJoinForm();">Créer un compte</a>
             </p>
         </div>
@@ -156,28 +148,97 @@
             <h2>Inscription à l'annuaire</h2>
             <form id="joinForm" onsubmit="handleJoinSubmit(event)">
                 <div class="form-group">
-                    <label for="nom">Nom complet</label>
-                    <input type="text" id="nom" required>
+                    <label for="nomFamilleLycee">Nom de Famille (celui au Lycée)</label>
+                    <input type="text" id="nomFamilleLycee" required>
                 </div>
                 <div class="form-group">
-                    <label for="promotion">Année de promotion</label>
+                    <label for="nomFamilleActuel">Nom de Famille Actuel</label>
+                    <input type="text" id="nomFamilleActuel">
+                </div>
+                <div class="form-group">
+                    <label for="prenom">Prénom</label>
+                    <input type="text" id="prenom" required>
+                </div>
+                <div class="form-group">
+                    <label for="paysResidence">Pays de résidence</label>
+                    <input type="text" id="paysResidence" required>
+                </div>
+                <div class="form-group">
+                    <label for="nationalite">Nationalité</label>
+                    <input type="text" id="nationalite">
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <input type="checkbox" id="emailVisible">
+                    <label for="emailVisible">Je veux que mon e-mail paraisse dans l'annuaire (Le mail n'est affiché que pour les membres de l'Association)</label>
+                </div>
+                <div class="form-group">
+                    <label for="facebook">Facebook</label>
+                    <input type="url" id="facebook">
+                </div>
+                <div class="form-group">
+                    <label for="instagram">Instagram</label>
+                    <input type="url" id="instagram">
+                </div>
+                <div class="form-group">
+                    <label for="statut">Statut</label>
+                    <select id="statut" required>
+                        <option value="">Sélectionnez votre statut</option>
+                        <option value="ancien_eleve">Ancien élève</option>
+                        <option value="administratif_prof">Administratif ou prof</option>
+                        <option value="parent_eleve">Parent d'élève</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="promotion">Promotion (année du Bac)</label>
                     <input type="number" id="promotion" min="1900" max="2024" required>
                 </div>
                 <div class="form-group">
-                    <label for="profession">Profession actuelle</label>
-                    <input type="text" id="profession" required>
+                    <label for="classeDebut">Classe de début</label>
+                    <select id="classeDebut" required>
+                        <option value="">Sélectionnez</option>
+                        <option value="CP">CP</option>
+                        <option value="CE1">CE1</option>
+                        <option value="CE2">CE2</option>
+                        <option value="CM1">CM1</option>
+                        <option value="CM2">CM2</option>
+                        <option value="6e">6ᵉ</option>
+                        <option value="5e">5ᵉ</option>
+                        <option value="4e">4ᵉ</option>
+                        <option value="3e">3ᵉ</option>
+                        <option value="2nde">2nde</option>
+                        <option value="1re">1ʳᵉ</option>
+                        <option value="Terminale">Terminale</option>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label for="localisation">Localisation</label>
-                    <input type="text" id="localisation" required>
+                    <label for="classeFin">Classe de fin</label>
+                    <select id="classeFin" required>
+                        <option value="">Sélectionnez</option>
+                        <option value="CP">CP</option>
+                        <option value="CE1">CE1</option>
+                        <option value="CE2">CE2</option>
+                        <option value="CM1">CM1</option>
+                        <option value="CM2">CM2</option>
+                        <option value="6e">6ᵉ</option>
+                        <option value="5e">5ᵉ</option>
+                        <option value="4e">4ᵉ</option>
+                        <option value="3e">3ᵉ</option>
+                        <option value="2nde">2nde</option>
+                        <option value="1re">1ʳᵉ</option>
+                        <option value="Terminale">Terminale</option>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label for="linkedin">Profil LinkedIn (optionnel)</label>
-                    <input type="url" id="linkedin">
+                    <label for="anneeDebut">Année de début</label>
+                    <input type="number" id="anneeDebut" min="1900" max="2024" required>
                 </div>
                 <div class="form-group">
-                    <label for="email">Email de contact</label>
-                    <input type="email" id="email" required>
+                    <label for="anneeFin">Année de fin</label>
+                    <input type="number" id="anneeFin" min="1900" max="2024" required>
                 </div>
                 <div class="form-group">
                     <label for="password">Mot de passe</label>
@@ -191,37 +252,17 @@
         </div>
     </div>
 
-    <!-- Modal pour la modification du profil -->
-    <div id="editProfileModal" class="modal">
+    <!-- Modal pour le mot de passe oublié -->
+    <div id="forgotPasswordModal" class="modal">
         <div class="modal-content">
-            <span class="close-modal" onclick="closeEditProfileForm()">&times;</span>
-            <h2>Modifier le profil</h2>
-            <form id="editProfileForm" onsubmit="handleEditProfileSubmit(event)">
+            <span class="close-modal" onclick="closeForgotPasswordForm()">&times;</span>
+            <h2>Mot de passe oublié</h2>
+            <form id="forgotPasswordForm" onsubmit="handleForgotPassword(event)">
                 <div class="form-group">
-                    <label for="editNom">Nom complet</label>
-                    <input type="text" id="editNom" required>
+                    <label for="forgotPasswordEmail">Email</label>
+                    <input type="email" id="forgotPasswordEmail" required>
                 </div>
-                <div class="form-group">
-                    <label for="editPromotion">Année de promotion</label>
-                    <input type="number" id="editPromotion" min="1900" max="2024" required>
-                </div>
-                <div class="form-group">
-                    <label for="editProfession">Profession actuelle</label>
-                    <input type="text" id="editProfession" required>
-                </div>
-                <div class="form-group">
-                    <label for="editLocalisation">Localisation</label>
-                    <input type="text" id="editLocalisation" required>
-                </div>
-                <div class="form-group">
-                    <label for="editLinkedin">Profil LinkedIn (optionnel)</label>
-                    <input type="url" id="editLinkedin">
-                </div>
-                <div class="form-group">
-                    <label for="editEmail">Email de contact</label>
-                    <input type="email" id="editEmail" required>
-                </div>
-                <button type="submit" class="submit-btn">Enregistrer les modifications</button>
+                <button type="submit" class="submit-btn">Réinitialiser le mot de passe</button>
             </form>
         </div>
     </div>

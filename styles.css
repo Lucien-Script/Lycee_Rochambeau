@@ -29,30 +29,33 @@ header {
     width: 100%;
     top: 0;
     z-index: 1000;
+    padding-top: 0.3rem; /* Further reduced padding at the top */
 }
 
 nav {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 1rem;
+    padding: 0.3rem 1rem; /* Further reduced vertical padding */
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    flex-wrap: wrap;
 }
 
-.logo {
-    flex-shrink: 0;
+.logo-center {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 0.5rem; /* Further reduced margin */
 }
 
 .logo h1 {
-    font-size: 1.5rem;
+    font-size: 2rem; /* Further reduced font size */
     color: var(--primary-color);
 }
 
 .logo h2 {
-    font-size: 1rem;
+    font-size: 1.2rem; /* Further reduced font size */
     color: var(--secondary-color);
+    margin-bottom: 0.3rem; /* Further reduced margin below h2 */
 }
 
 .nav-content {
@@ -61,7 +64,7 @@ nav {
     align-items: center;
     flex-grow: 1;
     flex-wrap: wrap;
-}
+    }
 
 .nav-links {
     display: flex;
@@ -385,9 +388,11 @@ main {
     margin: 5% auto;
     padding: 2rem;
     width: 90%;
-    max-width: 500px;
+    max-width: 600px;
     border-radius: 10px;
     box-shadow: 0 3px 20px rgba(0,0,0,0.2);
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .modal-content h2 {
@@ -395,6 +400,13 @@ main {
     margin-bottom: 1.5rem;
     text-align: center;
     font-size: 1.8rem;
+}
+
+.modal-content h3 {
+    color: var(--primary-color);
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-size: 1.4rem;
 }
 
 .close-modal {
@@ -422,7 +434,12 @@ main {
     font-weight: 500;
 }
 
-.form-group input {
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="number"],
+.form-group input[type="url"],
+.form-group select {
     width: 100%;
     padding: 0.8rem;
     border: 1px solid #ddd;
@@ -431,9 +448,65 @@ main {
     transition: border-color 0.3s ease;
 }
 
-.form-group input:focus {
+.form-group input:focus,
+.form-group select:focus {
     outline: none;
     border-color: var(--primary-color);
+}
+
+.form-group small {
+    display: block;
+    margin-top: 0.5rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Styles for inline groups */
+.inline-group {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.inline-group label {
+    margin-bottom: 0;
+}
+
+.inline-group select,
+.inline-group input {
+    flex: 1;
+}
+
+/* Checkbox styles */
+.form-group input[type="checkbox"] {
+    display: inline-block;
+    width: auto;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+
+.form-group label[for="emailVisible"],
+.form-group label[for="editEmailVisible"] {
+    display: inline-block;
+    vertical-align: middle;
+    font-weight: normal;
+}
+
+/* Optional field styles */
+.form-group label[for$="Actuel"],
+.form-group label[for="nationalite"],
+.form-group label[for="facebook"],
+.form-group label[for="instagram"] {
+    color: #666;
+}
+
+.form-group label[for$="Actuel"]::after,
+.form-group label[for="nationalite"]::after,
+.form-group label[for="facebook"]::after,
+.form-group label[for="instagram"]::after {
+    content: " (optionnel)";
+    font-style: italic;
+    font-weight: normal;
 }
 
 .submit-btn {
@@ -543,25 +616,20 @@ footer {
 
 @media (max-width: 768px) {
     header {
-        position: static;
+        padding-top: 0.2rem; /* Further reduced padding for mobile */
     }
 
-    nav {
-        flex-direction: column;
-        text-align: center;
-        padding: 0.5rem 0;
-    }
-
-    .logo {
-        margin-bottom: 0.5rem;
+    .logo-center {
+        margin-bottom: 0.3rem; /* Further reduced margin for mobile */
     }
 
     .logo h1 {
-        font-size: 1.2rem;
+        font-size: 1.6rem; /* Further reduced font size for mobile */
     }
 
     .logo h2 {
-        font-size: 0.8rem;
+        font-size: 1rem; /* Further reduced font size for mobile */
+        margin-bottom: 0.2rem; /* Further reduced margin for mobile */
     }
 
     .nav-links {
@@ -618,6 +686,15 @@ footer {
 
     .search-filters input {
         min-width: 100%;
+    }
+
+    .inline-group {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .inline-group label {
+        margin-bottom: 0.5rem;
     }
 }
 

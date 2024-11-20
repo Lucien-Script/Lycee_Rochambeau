@@ -1,383 +1,195 @@
-// Gestion de l'authentification
-let currentUser = null;
-
-// Fonction pour vérifier l'authentification
-function checkAuth() {
-    const isAuthenticated = !!currentUser;
-    const loginSection = document.getElementById('loginSection');
-    const directoryContent = document.getElementById('directoryContent');
-    const authButtons = document.querySelector('.auth-buttons');
-
-    if (loginSection) loginSection.style.display = isAuthenticated ? 'none' : 'block';
-    if (directoryContent) directoryContent.style.display = isAuthenticated ? 'block' : 'none';
-    
-    // Mettre à jour les boutons d'authentification
-    if (authButtons) {
-        if (isAuthenticated) {
-            authButtons.innerHTML = `
-                <button type="button" onclick="handleLogout()" class="auth-btn login-btn">Se déconnecter</button>
-            `;
-            const userWelcome = document.getElementById('userWelcome');
-            if (userWelcome) userWelcome.textContent = `Bienvenue, ${currentUser.nom}`;
-            displayAlumni(window.alumniData);
-        } else {
-            authButtons.innerHTML = `
-                <button type="button" onclick="openLoginForm()" class="auth-btn login-btn">Se connecter</button>
-                <button type="button" onclick="openJoinForm()" class="auth-btn signup-btn">S'inscrire</button>
-            `;
-        }
-    }
-}
-
-// Gestion des modals
-function openLoginForm() {
-    const modal = document.getElementById('loginModal');
-    if (modal) {
-        modal.style.display = 'block';
-        document.body.style.overflow = 'hidden';
-    }
-}
-
-function closeLoginForm() {
-    const modal = document.getElementById('loginModal');
-    if (modal) {
-        modal.style.display = 'none';
-        document.body.style.overflow = '';
-        const form = document.getElementById('loginForm');
-        if (form) form.reset();
-    }
-}
-
-function openJoinForm() {
-    const modal = document.getElementById('joinModal');
-    if (modal) {
-        modal.style.display = 'block';
-        document.body.style.overflow = 'hidden';
-    }
-}
-
-function closeJoinForm() {
-    const modal = document.getElementById('joinModal');
-    if (modal) {
-        modal.style.display = 'none';
-        document.body.style.overflow = '';
-        const form = document.getElementById('joinForm');
-        if (form) form.reset();
-    }
-}
-
-// Gestion de la connexion
-function handleLogin(event) {
-    event.preventDefault();
-    
-    const email = document.getElementById('loginEmail')?.value;
-    const password = document.getElementById('loginPassword')?.value;
-
-    if (!email || !password) return;
-
-    const user = window.users.find(u => u.email === email && u.password === password);
-    if (user) {
-        currentUser = user;
-        checkAuth();
-        closeLoginForm();
-    } else {
-        alert('Email ou mot de passe incorrect');
-    }
-}
-
-// Gestion de la déconnexion
-function handleLogout() {
-    currentUser = null;
-    checkAuth();
-}
-
-// Gestion de l'inscription
-function handleJoinSubmit(event) {
-    event.preventDefault();
-    
-    // Récupérer tous les champs du formulaire
-    const nom = document.getElementById('nom')?.value;
-    const promotion = document.getElementById('promotion')?.value;
-    const profession = document.getElementById('profession')?.value;
-    const localisation = document.getElementById('localisation')?.value;
-    const linkedin = document.getElementById('linkedin')?.value;
-    const email = document.getElementById('email')?.value;
-    const password = document.getElementById('password')?.value;
-
-    // Vérifier que tous les champs requis sont remplis
-    if (!nom || !promotion || !profession || !localisation || !email || !password) {
-        alert('Veuillez remplir tous les champs obligatoires');
-        return;
-    }
-
-    // Créer le nouvel utilisateur
-    const newUser = {
-        nom,
-        email,
-        password
-    };
-
-    // Créer le nouvel alumni
-    const newAlumni = {
-        nom,
-        promotion,
-        profession,
-        localisation,
-        linkedin: linkedin || '#',
-        email,
-        photo: 'https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=400'
-    };
-
-    // Initialiser les tableaux s'ils n'existent pas
-    if (!window.users) window.users = [];
-    if (!window.alumniData) window.alumniData = [];
-    
-    // Ajouter aux tableaux
-    window.users.push(newUser);
-    window.alumniData.push(newAlumni);
-    
-    // Connecter automatiquement
-    currentUser = newUser;
-    
-    // Mettre à jour l'affichage
-    checkAuth();
-    initializeFilters();
-    displayAlumni(window.alumniData);
-    
-    // Fermer le modal et afficher un message de succès
-    closeJoinForm();
-    alert('Inscription réussie ! Bienvenue dans l\'annuaire des anciens élèves.');
-}
-
-// Fonction pour afficher les anciens élèves
-function displayAlumni(alumni) {
-    const grid = document.getElementById('alumniGrid');
-    if (!grid) return;
-
-    grid.innerHTML = '';
-
-    alumni.forEach(person => {
-        const card = document.createElement('div');
-        card.className = 'alumni-card';
-        card.innerHTML = `
-            <div class="alumni-photo">
-                <img src="${person.photo}" alt="${person.nom}">
-            </div>
-            <h3>${person.nom}</h3>
-            <div class="alumni-info">Promotion ${person.promotion}</div>
-            <div class="alumni-info">${person.profession}</div>
-            <div class="alumni-info">${person.localisation}</div>
-            <div class="alumni-links">
-                <a href="${person.linkedin}" target="_blank" title="LinkedIn">
-                    <i class="fab fa-linkedin"></i>
-                </a>
-                <a href="mailto:${person.email}" title="Email">
-                    <i class="fas fa-envelope"></i>
-                </a>
-            </div>
-        `;
-        grid.appendChild(card);
-    });
-}
-
-// Initialisation des filtres
-function initializeFilters() {
-    const promotionFilter = document.getElementById('promotionFilter');
-    const locationFilter = document.getElementById('locationFilter');
-
-    if (!promotionFilter || !locationFilter || !window.alumniData) return;
-
-    const promotions = [...new Set(window.alumniData.map(a => a.promotion))].sort();
-    const locations = [...new Set(window.alumniData.map(a => a.localisation))].sort();
-
-    promotionFilter.innerHTML = '<option value="">Toutes les promotions</option>';
-    locationFilter.innerHTML = '<option value="">Toutes les localisations</option>';
-
-    promotions.forEach(promotion => {
-        const option = document.createElement('option');
-        option.value = promotion;
-        option.textContent = `Promotion ${promotion}`;
-        promotionFilter.appendChild(option);
-    });
-
-    locations.forEach(location => {
-        const option = document.createElement('option');
-        option.value = location;
-        option.textContent = location;
-        locationFilter.appendChild(option);
-    });
-}
-
-// Fonction de recherche et filtrage
-function filterAlumni() {
-    if (!currentUser || !window.alumniData) return;
-
-    const searchInput = document.getElementById('searchInput');
-    const promotionFilter = document.getElementById('promotionFilter');
-    const locationFilter = document.getElementById('locationFilter');
-
-    if (!searchInput || !promotionFilter || !locationFilter) return;
-
-    const searchTerm = searchInput.value.toLowerCase();
-    const promotionValue = promotionFilter.value;
-    const locationValue = locationFilter.value;
-
-    const filtered = window.alumniData.filter(person => {
-        const matchesSearch = person.nom.toLowerCase().includes(searchTerm) ||
-                            person.profession.toLowerCase().includes(searchTerm);
-        const matchesPromotion = !promotionValue || person.promotion === promotionValue;
-        const matchesLocation = !locationValue || person.localisation === locationValue;
-
-        return matchesSearch && matchesPromotion && matchesLocation;
-    });
-
-    displayAlumni(filtered);
+// Fonction pour charger la page d'accueil
+function loadHomePage() {
+    console.log("Loading home page");
+    loadPhotoAlbums();
+    loadEvents();
 }
 
 // Fonction pour charger et afficher les albums photos
 function loadPhotoAlbums() {
-    const albums = [
-        { id: 1, title: "Gala 2023", cover: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80" },
-        { id: 2, title: "Retrouvailles 2023", cover: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80" },
-        { id: 3, title: "Remise des diplômes 2023", cover: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&q=80" }
-    ];
+    console.log("Loading photo albums");
+    const albums = window.photoAlbums || [];
+    console.log("Photo albums data:", albums);
 
     const galleryGrid = document.querySelector('.gallery-grid');
-    if (!galleryGrid) return;
+    if (!galleryGrid) {
+        console.error("Gallery grid not found");
+        return;
+    }
 
+    console.log("Gallery grid found, clearing contents");
     galleryGrid.innerHTML = '';
 
     albums.forEach(album => {
+        console.log(`Creating album element for: ${album.title}`);
         const albumElement = document.createElement('div');
         albumElement.className = 'gallery-item';
         albumElement.innerHTML = `
-            <img src="${album.cover}" alt="${album.title}">
+            <img src="${album.cover}" alt="${album.title}" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x300?text=Image+Not+Found';">
             <h3>${album.title}</h3>
         `;
         albumElement.addEventListener('click', () => openPhotoAlbum(album.id));
         galleryGrid.appendChild(albumElement);
     });
+
+    console.log("Finished loading photo albums");
 }
 
-// Fonction pour ouvrir un album photo (à implémenter)
-function openPhotoAlbum(albumId) {
-    alert(`Ouverture de l'album ${albumId}. Fonctionnalité à implémenter.`);
-}
+// Fonction pour charger et afficher les événements
+function loadEvents() {
+    console.log("Loading events");
+    const events = window.events || [];
+    console.log("Events data:", events);
 
-// Améliorer la visibilité des liens sociaux
-function enhanceSocialLinks() {
-    const socialNav = document.querySelector('.social-nav');
-    if (socialNav) {
-        socialNav.innerHTML = `
-            <a href="https://www.instagram.com" target="_blank" class="instagram">
-                <i class="fab fa-instagram"></i>
-                Instagram
-            </a>
-            <a href="https://www.facebook.com/groups" target="_blank" class="facebook">
-                <i class="fab fa-facebook"></i>
-                Facebook
-            </a>
+    const eventsGrid = document.querySelector('.events-grid');
+    if (!eventsGrid) {
+        console.error("Events grid not found");
+        return;
+    }
+
+    console.log("Events grid found, clearing contents");
+    eventsGrid.innerHTML = '';
+
+    events.forEach(event => {
+        console.log(`Creating event element for: ${event.title}`);
+        const eventElement = document.createElement('div');
+        eventElement.className = 'event-card';
+        eventElement.innerHTML = `
+            <img src="${event.image}" alt="${event.title}">
+            <h3>${event.title}</h3>
+            <p>Date: ${event.date}</p>
+            <p>Lieu: ${event.location}</p>
         `;
+        eventsGrid.appendChild(eventElement);
+    });
+
+    console.log("Finished loading events");
+}
+
+// Fonction pour ouvrir le formulaire de connexion
+function openLoginForm() {
+    document.getElementById('loginModal').style.display = 'block';
+}
+
+// Fonction pour fermer le formulaire de connexion
+function closeLoginForm() {
+    document.getElementById('loginModal').style.display = 'none';
+}
+
+// Fonction pour ouvrir le formulaire d'inscription
+function openJoinForm() {
+    document.getElementById('joinModal').style.display = 'block';
+}
+
+// Fonction pour fermer le formulaire d'inscription
+function closeJoinForm() {
+    document.getElementById('joinModal').style.display = 'none';
+}
+
+// Fonction pour gérer la soumission du formulaire de connexion
+function handleLogin(event) {
+    event.preventDefault();
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    
+    console.log('Tentative de connexion avec:', email, password);
+    
+    const usersJSON = localStorage.getItem('users');
+    console.log('Contenu brut de localStorage[users]:', usersJSON);
+    
+    const users = JSON.parse(usersJSON || '[]');
+    console.log('Utilisateurs parsés:', users);
+    
+    const user = users.find(u => {
+        console.log('Comparaison avec:', u);
+        return u.email === email && u.password === password;
+    });
+    
+    if (user) {
+        console.log('Utilisateur trouvé:', user);
+        alert('Connexion réussie !');
+        // Ici, vous pouvez ajouter la logique pour afficher le contenu réservé aux membres
+        closeLoginForm();
+    } else {
+        console.log('Aucun utilisateur correspondant trouvé');
+        alert('Email ou mot de passe incorrect.');
     }
 }
 
-// Gérer le lien vers la boutique en ligne
-function handleOnlineStore() {
-    const storeLink = document.querySelector('.boutique-btn');
-    if (storeLink) {
-        storeLink.href = "https://shop.example.com";
-        storeLink.target = "_blank";
+// Fonction pour gérer la soumission du formulaire d'inscription
+function handleJoinSubmit(event) {
+    event.preventDefault();
+    console.log('Début de handleJoinSubmit');
+    
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const nomFamilleLycee = document.getElementById('nomFamilleLycee').value;
+    const prenom = document.getElementById('prenom').value;
+    const promotion = document.getElementById('promotion').value;
+
+    console.log('Données récupérées du formulaire:', { email, password, nomFamilleLycee, prenom, promotion });
+
+    if (!email || !password || !nomFamilleLycee || !prenom || !promotion) {
+        console.log('Données manquantes');
+        alert('Veuillez remplir tous les champs obligatoires.');
+        return;
     }
-}
 
-// Fonction pour gérer la navigation
-function handleNavigation() {
-    const currentPage = window.location.pathname.split("/").pop();
-
-    switch (currentPage) {
-        case "":
-        case "index.html":
-            loadHomePage();
-            break;
-        case "evenements.html":
-            loadEventsPage();
-            break;
-        case "photos.html":
-            loadPhotosPage();
-            break;
+    const userData = { email, password, nomFamilleLycee, prenom, promotion };
+    
+    console.log('Données d\'inscription:', userData);
+    
+    // Vérifier si l'email existe déjà
+    const existingUsers = JSON.parse(localStorage.getItem('users') || '[]');
+    console.log('Utilisateurs existants:', existingUsers);
+    
+    if (existingUsers.some(user => user.email === userData.email)) {
+        console.log('Email déjà utilisé');
+        alert('Cet email est déjà utilisé. Veuillez en choisir un autre.');
+        return;
     }
+    
+    // Ajouter le nouvel utilisateur
+    existingUsers.push(userData);
+    localStorage.setItem('users', JSON.stringify(existingUsers));
+    
+    console.log('Nouvel utilisateur enregistré:', userData);
+    console.log('Utilisateurs mis à jour:', JSON.parse(localStorage.getItem('users')));
+    
+    alert('Inscription réussie ! Vous pouvez maintenant vous connecter.');
+    closeJoinForm();
+    openLoginForm();
 }
 
-// Fonction pour charger la page d'accueil
-function loadHomePage() {
-    loadPhotoAlbums();
-    // Ajoutez ici d'autres fonctions spécifiques à la page d'accueil si nécessaire
+// Nouvelle fonction pour ouvrir le formulaire de mot de passe oublié
+function openForgotPasswordForm() {
+    closeLoginForm();
+    document.getElementById('forgotPasswordModal').style.display = 'block';
 }
 
-// Fonction pour charger la page des événements
-function loadEventsPage() {
-    // Implémentez ici la logique pour charger la page des événements
+// Nouvelle fonction pour fermer le formulaire de mot de passe oublié
+function closeForgotPasswordForm() {
+    document.getElementById('forgotPasswordModal').style.display = 'none';
 }
 
-// Fonction pour charger la page des photos
-function loadPhotosPage() {
-    loadPhotoAlbums();
-    // Ajoutez ici d'autres fonctions spécifiques à la page des photos si nécessaire
+// Nouvelle fonction pour gérer la soumission du formulaire de mot de passe oublié
+function handleForgotPassword(event) {
+    event.preventDefault();
+    const email = document.getElementById('forgotPasswordEmail').value;
+    console.log('Password reset requested for:', email);
+    // Ici, vous devriez implémenter la logique de réinitialisation du mot de passe
+    alert('Un e-mail de réinitialisation du mot de passe a été envoyé à ' + email);
+    closeForgotPasswordForm();
 }
 
 // Initialisation
 document.addEventListener('DOMContentLoaded', () => {
-    // Vérifier l'authentification
-    checkAuth();
+    console.log("DOM fully loaded");
     
-    // Initialiser les filtres
-    initializeFilters();
+    // Ajouter les écouteurs d'événements pour les formulaires
+    document.getElementById('joinForm').addEventListener('submit', handleJoinSubmit);
+    document.getElementById('loginForm').addEventListener('submit', handleLogin);
     
-    // Améliorer la visibilité des liens sociaux
-    enhanceSocialLinks();
-    
-    // Gérer le lien vers la boutique en ligne
-    handleOnlineStore();
-    
-    // Ajouter les écouteurs d'événements pour la recherche et le filtrage
-    const searchInput = document.getElementById('searchInput');
-    const promotionFilter = document.getElementById('promotionFilter');
-    const locationFilter = document.getElementById('locationFilter');
-    const loginForm = document.getElementById('loginForm');
-    const joinForm = document.getElementById('joinForm');
-
-    if (searchInput) searchInput.addEventListener('input', filterAlumni);
-    if (promotionFilter) promotionFilter.addEventListener('change', filterAlumni);
-    if (locationFilter) locationFilter.addEventListener('change', filterAlumni);
-    if (loginForm) loginForm.addEventListener('submit', handleLogin);
-    if (joinForm) joinForm.addEventListener('submit', handleJoinSubmit);
-
-    // Fermer les modals si on clique en dehors
-    window.onclick = function(event) {
-        const loginModal = document.getElementById('loginModal');
-        const joinModal = document.getElementById('joinModal');
-        if (event.target === loginModal) {
-            closeLoginForm();
-        }
-        if (event.target === joinModal) {
-            closeJoinForm();
-        }
-    };
-
-    // Gérer la navigation et charger le contenu approprié
-    handleNavigation();
-    
-    // Chargez les albums photos directement si nous sommes sur la page d'accueil
-    if (window.location.pathname === "/" || window.location.pathname.endsWith("index.html")) {
-        loadPhotoAlbums();
-    }
+    // Charger le contenu de la page d'accueil
+    loadHomePage();
 });
-
-// Exposer les fonctions globalement
-window.openLoginForm = openLoginForm;
-window.closeLoginForm = closeLoginForm;
-window.openJoinForm = openJoinForm;
-window.closeJoinForm = closeJoinForm;
-window.handleLogin = handleLogin;
-window.handleLogout = handleLogout;
-window.handleJoinSubmit = handleJoinSubmit;
